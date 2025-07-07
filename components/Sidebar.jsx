@@ -11,13 +11,22 @@ import {
   ChevronRight,
 } from "lucide-react";
 
-export default function Sidebar({ onSelect }) {
+export default function Sidebar({ onSelect, onMobileClose, isOpen = true }) {
   const [activeSection, setActiveSection] = useState(null);
   const [selectedTopic, setSelectedTopic] = useState(null);
 
   const handleTopicSelect = (topic) => {
+    console.log("Topic selected:", topic);
     setSelectedTopic(topic);
-    onSelect(topic);
+
+    if (onSelect) {
+      onSelect(topic);
+    }
+
+    if (onMobileClose) {
+      console.log("Closing sidebar");
+      onMobileClose();
+    }
   };
 
   const toggleSection = (section) => {
@@ -55,7 +64,6 @@ export default function Sidebar({ onSelect }) {
           title: "JavaScript Deep Concepts",
           icon: <Zap className="w-4 h-4" />,
         },
-
         {
           id: "js-loops",
           title: "Loops & Iterations",
@@ -66,7 +74,6 @@ export default function Sidebar({ onSelect }) {
           title: "JavaScript Array Methods",
           icon: <Repeat className="w-4 h-4" />,
         },
-
         {
           id: "js-OOP",
           title: "Object-Oriented Programming (OOP)",
@@ -103,9 +110,35 @@ export default function Sidebar({ onSelect }) {
     },
   };
 
+  if (!isOpen) {
+    return null;
+  }
+
   return (
-    <div className="flex flex-col w-80 h-screen bg-gradient-to-br from-slate-50 to-blue-50/30 border-r border-slate-200/60">
-      {/* Header */}
+    <div className="flex flex-col w-80 h-screen bg-gradient-to-br from-slate-50 to-blue-50/30 border-r border-slate-200/60 relative">
+      <div className="absolute top-4 right-4 z-10">
+        <button
+          onClick={() => {
+            if (onMobileClose) onMobileClose();
+          }}
+          className="p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-all duration-200"
+        >
+          <svg
+            className="w-5 h-5 text-slate-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+      </div>
+
       <div className="p-6 border-b border-slate-200/50 shrink-0">
         <div className="flex items-center gap-3 mb-2">
           <div className="p-2 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl shadow-lg">
