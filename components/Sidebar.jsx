@@ -16,15 +16,13 @@ export default function Sidebar({ onSelect, onMobileClose, isOpen = true }) {
   const [selectedTopic, setSelectedTopic] = useState(null);
 
   const handleTopicSelect = (topic) => {
-    console.log("Topic selected:", topic);
     setSelectedTopic(topic);
-
-    if (onSelect) {
-      onSelect(topic);
-    }
-
-    if (onMobileClose) {
-      console.log("Closing sidebar");
+    if (onSelect) onSelect(topic);
+    if (
+      onMobileClose &&
+      typeof window !== "undefined" &&
+      window.innerWidth < 1024
+    ) {
       onMobileClose();
     }
   };
@@ -110,17 +108,13 @@ export default function Sidebar({ onSelect, onMobileClose, isOpen = true }) {
     },
   };
 
-  if (!isOpen) {
-    return null;
-  }
+  if (!isOpen) return null;
 
   return (
-    <div className="flex flex-col w-80 h-screen bg-gradient-to-br from-slate-50 to-blue-50/30 border-r border-slate-200/60 relative">
-      <div className="absolute top-4 right-4 z-10">
+    <div className="flex flex-col w-80 h-screen bg-gradient-to-br from-slate-50 to-blue-50/30 border-r border-slate-200/60 relative z-50">
+      <div className="absolute top-4 right-4 z-10 lg:hidden">
         <button
-          onClick={() => {
-            if (onMobileClose) onMobileClose();
-          }}
+          onClick={onMobileClose}
           className="p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-all duration-200"
         >
           <svg
