@@ -69,7 +69,15 @@ export default function LearnPage() {
           }
         `}
       >
-        <Sidebar onSelect={setSelected} onMobileClose={handleMobileClose} />
+        <Sidebar
+          onSelect={(id) => {
+            setSelected(id);
+            if (typeof window !== "undefined") {
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }
+          }}
+          onMobileClose={handleMobileClose}
+        />
       </div>
 
       <main className="flex-1 p-4 lg:p-6 pt-20 lg:pt-6 z-10">
